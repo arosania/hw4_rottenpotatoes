@@ -1,13 +1,17 @@
--#  This file is app/views/movies/index.html.haml
+-# This file is app/views/movies/index.html.haml
+
 %h1 All Movies
+
+- if @noDirector
+  %p= "'#{@noDirector}' has no director info"
 
 = form_tag movies_path, :method => :get, :id => 'ratings_form' do
   = hidden_field_tag "title_sort", true if @title_header
   = hidden_field_tag ":release_date_sort", true if @date_header
-  Include: 
+  Include:
   - @all_ratings.each do |rating|
     = rating
-    = check_box_tag "ratings[#{rating}]", 1, @selected_ratings.include?(rating), :id => "ratings_#{rating}"
+    = check_box_tag "ratings[#{rating}]", 1, @selected_ratings.include?(rating)
   = submit_tag 'Refresh', :id => 'ratings_submit'
 
 %table#movies
@@ -20,7 +24,7 @@
   %tbody
     - @movies.each do |movie|
       %tr
-        %td= movie.title 
+        %td= movie.title
         %td= movie.rating
         %td= movie.release_date
         %td= link_to "More about #{movie.title}", movie_path(movie)
